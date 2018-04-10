@@ -1,12 +1,16 @@
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Consumer;
 
+import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 
 @SuppressWarnings("serial")
 public class WidgetDatasets extends JPanel {
@@ -25,23 +29,29 @@ public class WidgetDatasets extends JPanel {
 		
 		Dataset[] datasets = Controller.getAllDatasets();
 		datasetsMap = new LinkedHashMap<Dataset, JCheckBox>();
-		
-		setLayout(new GridLayout(datasets.length, 2, 10, 10));
+		JPanel checkBoxPanel = new JPanel();
+		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(150, 150));
+		JScrollPane checkBoxScrollable = new JScrollPane(checkBoxPanel);
+		setLayout(new GridLayout(1, 2, 10, 10));
 		add(new JLabel("Datasets: "));
 		
 		for(int i = 0; i < datasets.length; i++) {
 			
 			JCheckBox checkbox = new JCheckBox(datasets[i].name);
+			checkbox.setForeground(datasets[i].color);
 			checkbox.addActionListener(event -> notifyHandler());
 			
 			datasetsMap.put(datasets[i], checkbox);
 			
 			if(i != 0)
-				add(new JLabel(""));
-			add(checkbox);
+				checkBoxPanel.add(new JLabel(""));
+			checkBoxPanel.add(checkbox);
 			
 		}
-		
+		//checkBoxScrollable.add(checkBoxPanel);
+		add(checkBoxScrollable);
+
 		handler = eventHandler;
 		notifyHandler();
 		
