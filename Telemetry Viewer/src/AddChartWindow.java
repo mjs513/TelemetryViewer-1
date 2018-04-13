@@ -1,4 +1,6 @@
 import java.awt.GridLayout;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -8,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 @SuppressWarnings("serial")
@@ -36,9 +39,11 @@ public class AddChartWindow extends JDialog {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel windowContents = new JPanel();
+		JScrollPane windowContentsScroll = new JScrollPane(windowContents);
+		windowContentsScroll.setBorder(BorderFactory.createEmptyBorder());
 		windowContents.setBorder(new EmptyBorder(10, 10, 10, 10));
 		windowContents.setLayout(new BoxLayout(windowContents, BoxLayout.Y_AXIS));
-		add(windowContents);
+		add(windowContentsScroll);
 		
 		JComboBox<String> chartTypeCombobox = new JComboBox<String>(Controller.getChartTypes());
 		
@@ -64,14 +69,12 @@ public class AddChartWindow extends JDialog {
 				Controller.removeChart(chart);
 			windowContents.removeAll();
 			windowContents.add(chartTypePanel);
-			windowContents.add(Box.createVerticalStrut(40));
+			windowContents.add(Box.createVerticalStrut(20));
 			
 			// create the chart and show it's widgets
 			chart = Controller.createAndAddChart(chartTypeCombobox.getSelectedItem().toString(), x1, y1, x2, y2);
 			for(JPanel widget : chart.getWidgets()) {
-				
 				windowContents.add(widget != null ? widget : Box.createVerticalStrut(10));
-				windowContents.add(Box.createVerticalStrut(10));
 				
 			}
 			
@@ -87,7 +90,7 @@ public class AddChartWindow extends JDialog {
 				
 		});
 
-		setResizable(false);
+		setResizable(true);
 		chartTypeCombobox.getActionListeners()[0].actionPerformed(null);
 		
 		setLocationRelativeTo(parentWindow);
